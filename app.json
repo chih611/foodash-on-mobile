@@ -15,6 +15,7 @@
       }
     },
     "android": {
+      "package": "com.foodash.mobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
