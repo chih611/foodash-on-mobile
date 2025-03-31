@@ -31,14 +31,13 @@ export default function ImageViewer({ imgSource, link, name }: Props) {
 
 const styles = StyleSheet.create({
     image: {
-        width: 200,
-        height: 200,
-        borderRadius: 18,
+        width: 160,
+        height: 160,
+        marginHorizontal: 10,
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
         padding: 10,
-        borderRadius: 5,
     },
     text: {
         color: 'white',

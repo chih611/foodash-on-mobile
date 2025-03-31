@@ -14,7 +14,7 @@ export default function MatchaScreen() {
             </View>
             <View style={styles.breadcrumbContainer}>
                 <Breadcrumb
-                    breadcrumbs={['Category', 'Desserts']}
+                    breadcrumbs={['Category', 'Matcha']}
                     onPress={handleBreadcrumbPress}
                 />
             </View>

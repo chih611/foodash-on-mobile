@@ -27,12 +27,13 @@ export default function Index() {
         />
       </View>
       <View style={styles.imageContainer}>
-        <ImageViewer imgSource={PlaceholderImage} link='desserts' name='Desserts' />
+        <View>
+          <ImageViewer imgSource={PlaceholderImage} link='desserts' name='Desserts' />
+        </View>
+        <View>
+          <ImageViewer imgSource={PlaceholderImage} link='matcha' name='Matcha' />
+        </View>
       </View>
-      <View style={styles.imageContainer}>
-        <ImageViewer imgSource={PlaceholderImage} link='matcha' name='Matcha' />
-      </View>
-
     </View>
   );
 }
@@ -44,17 +45,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   breadcrumbContainer: {
-    flex: 1 / 4,
+    flex: 1 / 8,
     width: '100%',
     paddingHorizontal: 30,
 
   },
   headerContainer: {
-    flex: 1 / 2,
+    flex: 1 / 6,
     width: '100%',
   },
   imageContainer: {
     flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%',
   },
   footerContainer: {
     flex: 1 / 3,
