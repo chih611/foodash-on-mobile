@@ -1,9 +1,10 @@
+import GoogleMap from '@/components/GoogleMap';
 import { Text, View, StyleSheet } from 'react-native';
 
 export default function MapScreen() {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Map screen</Text>
+            <GoogleMap />
         </View>
     );
 }
@@ -11,9 +12,7 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffffff',
-        justifyContent: 'center',
-        alignItems: 'center',
+        width: '100%',
     },
     text: {
         color: '#F38B3C',
