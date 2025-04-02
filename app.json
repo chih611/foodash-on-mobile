@@ -22,7 +22,8 @@
       },
       "config": {
         "googleMapsApiKey": "AIzaSyBF5NvI9qkvQhE69wNxCwzovOr2ja5Cgtg"
-      }
+      },
+      "package": "com.anonymous.foodash"
     },
     "web": {
       "bundler": "metro",
