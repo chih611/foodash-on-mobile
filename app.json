@@ -15,15 +15,14 @@
       }
     },
     "android": {
-      "package": "com.foodash.mobile",
+      "package": "com.anonymous.foodash",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "config": {
         "googleMapsApiKey": "AIzaSyBF5NvI9qkvQhE69wNxCwzovOr2ja5Cgtg"
-      },
-      "package": "com.anonymous.foodash"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -44,6 +43,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "28d0246c-c4cc-48d2-b798-e172c44d1e58"
+      }
     }
   }
 }

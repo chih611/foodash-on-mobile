@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "341923236114",
+    "project_id": "foodash-mobile",
+    "storage_bucket": "foodash-mobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341923236114:android:2340983b1122dd82468bcb",
+        "android_client_info": {
+          "package_name": "com.foodash.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341923236114-55jiqfl4crq4r8336tqmdv28h0r8epud.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foodash.mobile",
+            "certificate_hash": "a7ba6112bcc1a7c6daae362363f57f95f6d2207f"
+          }
+        },
+        {
+          "client_id": "341923236114-t6so2g2sjhg363ln9kh9qgk286mss9le.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2IyfA11Coo3M6yz_Pw-A_sAt3bf7NSqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341923236114-t6so2g2sjhg363ln9kh9qgk286mss9le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
