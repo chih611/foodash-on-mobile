@@ -119,6 +119,7 @@ const DessertShopsMap = () => {
                         padding: 10,
                         borderRadius: 5,
                     })}
+                    onPress={handleItemSearch}
 
                 >
                     <MaterialIcons name="search" size={24} color="#F38B3C" />
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     },
     map: {
         width: '100%',
-        height: '90%',
+        height: '100%',
     },
     loadingContainer: {
         flex: 1,
