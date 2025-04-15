@@ -16,7 +16,6 @@ import Button from "@/components/Button";
 import { auth } from "@/firebaseConfig";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
-import { makeRedirectUri } from "expo-auth-session";
 import Breadcrumb from "@/components/Breadcrumb";
 import SearchComponent from "@/components/Search";
 import { useRouter } from "expo-router";
@@ -61,9 +60,6 @@ export default function SignInScreen() {
     }
   };
 
-  const handleBreadcrumbPress = (index: number) =>
-    console.log(`Breadcrumb ${index} clicked`);
-
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -72,7 +68,9 @@ export default function SignInScreen() {
       <View style={styles.breadcrumbContainer}>
         <Breadcrumb
           breadcrumbs={["Auth", "Sign In"]}
-          onPress={handleBreadcrumbPress}
+          onPress={(index: number) =>
+            console.log(`Breadcrumb ${index} clicked`)
+          }
         />
       </View>
 
@@ -134,13 +132,6 @@ const styles = StyleSheet.create({
   link: { color: "#F38B3C", alignSelf: "flex-end", marginBottom: 20 },
   button: {
     backgroundColor: "#F38B3C",
-    width: "100%",
-    padding: 12,
-    borderRadius: 15,
-    alignItems: "center",
-  },
-  googleButton: {
-    backgroundColor: "#000000",
     width: "100%",
     padding: 12,
     borderRadius: 15,
