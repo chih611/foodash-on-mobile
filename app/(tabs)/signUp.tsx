@@ -12,6 +12,9 @@ import { auth } from "@/firebaseConfig";
 import Breadcrumb from "@/components/Breadcrumb";
 import SearchComponent from "@/components/Search";
 import { useRouter } from "expo-router";
+import { useForm, Controller } from "react-hook-form";
+import { useEffect } from "react";
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 
 export default function SignUpScreen() {
   const router = useRouter();
