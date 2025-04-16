@@ -6,11 +6,18 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Image,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { useForm, Controller } from "react-hook-form";
 
 export default function ProfileScreen() {
+  const { control, handleSubmit } = useForm();
+
+  const onSubmit = (data: any) => {
+    alert("Profile data submitted!" + JSON.stringify(data));
+    console.log("Submitted profile data:", data);
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -37,41 +44,105 @@ export default function ProfileScreen() {
 
         {/* Input Fields */}
         <View style={styles.row}>
-          <TextInput style={styles.input} placeholder="First name" />
-          <TextInput style={styles.input} placeholder="Last name" />
+          <Controller
+            control={control}
+            name="firstName"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="First name"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="lastName"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Last name"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
         </View>
-        <View style={styles.row}>
-          <TextInput style={styles.input} placeholder="dd/mm/yyyy" />
-          <TextInput style={styles.input} placeholder="Gender" />
-        </View>
-        <TextInput style={styles.inputFull} placeholder="Contacts" />
-        <TextInput style={styles.inputFull} placeholder="Address line 1" />
-        <TextInput style={styles.inputFull} placeholder="Address line 2" />
 
-        <TouchableOpacity style={styles.saveButton}>
+        <View style={styles.row}>
+          <Controller
+            control={control}
+            name="dob"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="dd/mm/yyyy"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="gender"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Gender"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+        </View>
+
+        <Controller
+          control={control}
+          name="contacts"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.inputFull}
+              placeholder="Contacts"
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="address1"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.inputFull}
+              placeholder="Address line 1"
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="address2"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.inputFull}
+              placeholder="Address line 2"
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+        />
+
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={handleSubmit(onSubmit)}
+        >
           <Text style={styles.saveText}>Save profile</Text>
         </TouchableOpacity>
       </ScrollView>
-
-      {/* Bottom Tab */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="home-outline" size={20} color="#f38b3c" />
-          <Text style={styles.tabLabel}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="map-outline" size={20} color="#f38b3c" />
-          <Text style={styles.tabLabel}>Map</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="cloud-upload-outline" size={20} color="#f38b3c" />
-          <Text style={styles.tabLabel}>Upload</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.tabItem, styles.activeTab]}>
-          <Ionicons name="person-outline" size={20} color="#fff" />
-          <Text style={[styles.tabLabel, { color: "#fff" }]}>Profile</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
