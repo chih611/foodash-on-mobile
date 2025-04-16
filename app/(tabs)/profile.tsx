@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
-
+import Button from "@/components/Button";
 export default function ProfileScreen() {
   const { control, handleSubmit } = useForm();
 
@@ -142,6 +142,12 @@ export default function ProfileScreen() {
         >
           <Text style={styles.saveText}>Save profile</Text>
         </TouchableOpacity>
+
+        <Button
+          theme="red"
+          label="Sign out "
+          onPress={() => alert("Signed out")}
+        />
       </ScrollView>
     </View>
   );
