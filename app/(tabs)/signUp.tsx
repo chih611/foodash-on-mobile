@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -13,29 +13,37 @@ import Breadcrumb from "@/components/Breadcrumb";
 import SearchComponent from "@/components/Search";
 import { useRouter } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
-import { useEffect } from "react";
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+
+type SignUpFormData = {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export default function SignUpScreen() {
   const router = useRouter();
-
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<SignUpFormData>();
 
   const handleBreadcrumbPress = (index: number) =>
     console.log(`Breadcrumb ${index} clicked`);
 
-  const handleSignUp = async () => {
-    if (password !== confirmPassword) {
+  const onSubmit = async (data: SignUpFormData) => {
+    if (data.password !== data.confirmPassword) {
       Alert.alert("Error", "Passwords do not match");
       return;
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, data.email, data.password);
       Alert.alert("Success", "Account created successfully!");
+      reset();
       router.replace("/");
     } catch (error: any) {
       Alert.alert("Error", error.message);
@@ -55,33 +63,67 @@ export default function SignUpScreen() {
       </View>
 
       <View style={styles.formContainer}>
-        <TextInput
-          placeholder="Full Name"
-          style={styles.input}
-          value={fullName}
-          onChangeText={setFullName}
+        <Controller
+          control={control}
+          name="fullName"
+          rules={{ required: "Full Name is required" }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              placeholder="Full Name"
+              style={styles.input}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
-        <TextInput
-          placeholder="Email"
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
+
+        <Controller
+          control={control}
+          name="email"
+          rules={{ required: "Email is required" }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              placeholder="Email"
+              style={styles.input}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+          )}
         />
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
+
+        <Controller
+          control={control}
+          name="password"
+          rules={{ required: "Password is required" }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              placeholder="Password"
+              style={styles.input}
+              secureTextEntry
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
-        <TextInput
-          placeholder="Confirm Password"
-          style={styles.input}
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
+
+        <Controller
+          control={control}
+          name="confirmPassword"
+          rules={{ required: "Confirm your password" }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              placeholder="Confirm Password"
+              style={styles.input}
+              secureTextEntry
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
-        <Pressable style={styles.button} onPress={handleSignUp}>
+
+        <Pressable style={styles.button} onPress={handleSubmit(onSubmit)}>
           <Text style={styles.buttonText}>Sign up</Text>
         </Pressable>
 
