@@ -21,7 +21,7 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity>
           <Ionicons name="menu" size={24} color="#fff" />
         </TouchableOpacity>
@@ -29,7 +29,7 @@ export default function ProfileScreen() {
         <TouchableOpacity>
           <Ionicons name="person-circle-outline" size={28} color="#fff" />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Avatar */}
