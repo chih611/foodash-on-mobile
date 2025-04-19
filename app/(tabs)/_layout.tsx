@@ -1,5 +1,4 @@
 import { Tabs } from 'expo-router';
-
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -56,7 +55,7 @@ export default function TabLayout() {
           ),
         }}
       />
-            <Tabs.Screen
+      <Tabs.Screen
         name="signIn"
         options={{
           title: 'Sign In',
@@ -65,7 +64,7 @@ export default function TabLayout() {
           ),
         }}
       />
-            <Tabs.Screen
+      <Tabs.Screen
         name="signUp"
         options={{
           title: 'Sign Up',

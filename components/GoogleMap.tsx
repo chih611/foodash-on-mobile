@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Button, FlatList, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
@@ -8,13 +8,51 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 
 const DessertShopsMap = () => {
-    const [region, setRegion] = useState(null);
-    const [shops, setShops] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [errorMsg, setErrorMsg] = useState(null);
-    const [searchItem, setSearchItem] = useState('');
-    const [searchHistory, setSearchHistory] = useState([]);
+    interface Region {
+        latitude: number;
+        longitude: number;
+        latitudeDelta: number;
+        longitudeDelta: number;
+    }
 
+    const [region, setRegion] = useState<Region | null>(null);
+    interface Shop {
+        place_id: string;
+        name: string;
+        vicinity: string;
+        rating?: number;
+        geometry: {
+            location: {
+                lat: number;
+                lng: number;
+            };
+        };
+    }
+
+    const [shops, setShops] = useState<Shop[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [searchItem, setSearchItem] = useState('');
+    const [searchHistory, setSearchHistory] = useState<string[]>([]);
+    let MapView;
+    if (Platform.OS === 'web') {
+        // Web implementation (simplified)
+        MapView = ({ children, style, initialRegion }: { children: React.ReactNode; style: any; initialRegion: any }) => (
+            <View style={[style, { backgroundColor: '#f0f0f0' }]}>
+                <Text style={{ padding: 20 }}>
+                    Map View (Web Preview - Lat: {initialRegion?.latitude}, Lng: {initialRegion?.longitude})
+                </Text>
+                {children}
+            </View>
+        );
+
+        // Marker = ({ children }) => children;
+    } else {
+        // Native implementation
+        const RNMaps = require('react-native-maps');
+        MapView = RNMaps.default;
+        // Marker = RNMaps.Marker;
+    }
     // Get user's current location
     useEffect(() => {
         (async () => {
@@ -39,7 +77,7 @@ const DessertShopsMap = () => {
         })();
     }, []);
 
-    const fetchNearbyShops = async (lat, lng, item = '') => {
+    const fetchNearbyShops = async (lat: number, lng: number, item: string = '') => {
         try {
             setLoading(true);
             const apiKey = 'AIzaSyBF5NvI9qkvQhE69wNxCwzovOr2ja5Cgtg';
@@ -79,8 +117,10 @@ const DessertShopsMap = () => {
         setSearchItem('');
     };
 
-    const handleHistoryItemPress = (item) => {
-        fetchNearbyShops(region.latitude, region.longitude, item);
+    const handleHistoryItemPress = (item: string) => {
+        if (region) {
+            fetchNearbyShops(region.latitude, region.longitude, item);
+        }
     };
 
     if (loading && !region) {
