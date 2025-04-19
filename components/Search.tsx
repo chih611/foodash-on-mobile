@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, FlatList, Text, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const data = [
@@ -34,20 +34,12 @@ const SearchComponent = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Have something in mind?"
+                    placeholderTextColor="grey"
                     value={searchQuery}
                     onChangeText={handleSearch}
                 />
                 <MaterialIcons name="search" size={24} color="#F38B3C" />
             </View>
-
-            {/* Search Results */}
-            {/* <FlatList
-                data={filteredData}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <Text style={styles.resultItem}>{item.name}</Text>
-                )}
-            /> */}
         </View>
     );
 };
@@ -55,13 +47,13 @@ const SearchComponent = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
+        paddingVertical: 20,
         backgroundColor: "#fff",
     },
     searchContainer: {
+        color: "#F38B3C",
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#f0f0f0",
         borderRadius: 30,
         paddingHorizontal: 10,
         paddingVertical: 8,

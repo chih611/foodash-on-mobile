@@ -32,17 +32,13 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs, onPress }) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        alignItems: 'center',
-        margin: 10,
     },
     breadcrumb: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     text: {
-        fontSize: 20,
-        color: '#000',
-        fontWeight: 'bold',
+        fontSize: 30,
     },
     separator: {
         fontSize: 16,

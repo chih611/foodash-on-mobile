@@ -1,10 +1,12 @@
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, Text } from 'react-native';
 
 import Button from '@/components/Button';
 import ImageViewer from '@/components/ImageViewer';
 import SearchComponent from '@/components/Search';
 import Breadcrumb from '@/components/Breadcrumb';
-import { Link } from 'expo-router';
+import RestaurantCard from './restaurantCard';
+
+
 
 
 
@@ -14,27 +16,42 @@ export default function Index() {
   const handleBreadcrumbPress = (index: number) => {
     console.log(`Breadcrumb ${index} clicked`);
   };
-  // const { product } = { product: { id: "1", name: "iPhone 15" } };
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <SearchComponent />
-      </View>
-      <View style={styles.breadcrumbContainer}>
-        <Breadcrumb
-          breadcrumbs={['Category']}
-          onPress={handleBreadcrumbPress}
-        />
-      </View>
-      <View style={styles.imageContainer}>
-        <View>
-          <ImageViewer imgSource={PlaceholderImage} link='desserts' name='Desserts' />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <View style={styles.searchContainer}>
+          <SearchComponent />
         </View>
-        <View>
-          <ImageViewer imgSource={PlaceholderImage} link='matcha' name='Matcha' />
+        <View style={styles.breadcrumbContainer}>
+          <Breadcrumb
+            breadcrumbs={['Categories']}
+            onPress={handleBreadcrumbPress}
+          />
+          <View style={styles.divider} />
+        </View>
+        <View style={styles.imageContainer}>
+          <View>
+            <ImageViewer imgSource={PlaceholderImage} link='desserts' name='Desserts' />
+          </View>
+          <View>
+            <ImageViewer imgSource={PlaceholderImage} link='matcha' name='Matcha' />
+          </View>
+        </View>
+        <View style={styles.mostPopularPlacesContainer}>
+          <Text style={styles.mostPopularPlacesText}>
+            Most popular places
+          </Text>
+          <View style={styles.divider} />
+        </View>
+        <View style={styles.imageContainer}>
+          {/* <View>
+            <ImageViewer imgSource={PlaceholderImage} link='desserts' name='Desserts' />
+          </View> */}
+          <RestaurantCard name='ToriMatcha' />
         </View>
       </View>
-    </View>
+
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -43,25 +60,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   breadcrumbContainer: {
-    flex: 1 / 8,
+    flex: 2 / 12,
     width: '100%',
-    paddingHorizontal: 30,
-
   },
-  headerContainer: {
-    flex: 1 / 6,
+  searchContainer: {
+    flex: 2 / 12,
     width: '100%',
+    fontFamily: 'sans-serif',
   },
   imageContainer: {
-    flex: 1,
+    flex: 4 / 12,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     width: '100%',
+    // minHeight: '20%',
   },
-  footerContainer: {
-    flex: 1 / 3,
-    alignItems: 'center',
+  divider: {
+    height: 2,
+    backgroundColor: '#F38B3C', // Light gray color
+    width: '100%',
+    marginTop: 16, // Space above and below the line
   },
+  mostPopularPlacesContainer: {
+    flex: 2 / 12,
+    width: '100%',
+    fontFamily: 'sans-serif',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  mostPopularPlacesText: {
+    fontSize: 30,
+  }
 });
