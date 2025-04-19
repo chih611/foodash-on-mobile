@@ -4,7 +4,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 type Props = {
   label: string;
-  theme?: "primary" | "google";
+  theme?: "primary" | "red" | "google";
   onPress?: () => void;
 };
 
@@ -30,6 +30,23 @@ export default function Button({ label, theme, onPress }: Props) {
           <Text style={[styles.buttonLabel, { color: "#25292e" }]}>
             {label}
           </Text>
+        </Pressable>
+      </View>
+    );
+  } else if (theme === "red") {
+    return (
+      <View style={styles.buttonContainer}>
+        <Pressable
+          style={[styles.button, { backgroundColor: "#D9534F" }]}
+          onPress={onPress}
+        >
+          <FontAwesome
+            name="picture-o"
+            size={18}
+            color="#fff"
+            style={styles.buttonIcon}
+          />
+          <Text style={[styles.buttonLabel, { color: "#fff" }]}>{label}</Text>
         </Pressable>
       </View>
     );
