@@ -12,6 +12,7 @@ import {
   signInWithCredential,
   GoogleAuthProvider,
 } from "firebase/auth";
+import Button from "@/components/Button";
 import { auth } from "@/firebaseConfig";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
@@ -28,14 +29,18 @@ export default function SignInScreen() {
   const [password, setPassword] = useState("");
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: "YOUR_ANDROID_CLIENT_ID",
-    webClientId: "YOUR_WEB_CLIENT_ID",
+    androidClientId:
+      "341923236114-55jiqfl4crq4r8336tqmdv28h0r8epud.apps.googleusercontent.com",
+    webClientId:
+      "341923236114-t6so2g2sjhg363ln9kh9qgk286mss9le.apps.googleusercontent.com",
+    redirectUri: "https://auth.expo.io/@kevintran3011/foodash",
   });
 
   useEffect(() => {
     if (response?.type === "success") {
       const { id_token } = response.params;
       const credential = GoogleAuthProvider.credential(id_token);
+
       signInWithCredential(auth, credential)
         .then(() => {
           Alert.alert("Success", "Signed in with Google!");
@@ -55,9 +60,6 @@ export default function SignInScreen() {
     }
   };
 
-  const handleBreadcrumbPress = (index: number) =>
-    console.log(`Breadcrumb ${index} clicked`);
-
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -66,7 +68,9 @@ export default function SignInScreen() {
       <View style={styles.breadcrumbContainer}>
         <Breadcrumb
           breadcrumbs={["Auth", "Sign In"]}
-          onPress={handleBreadcrumbPress}
+          onPress={(index: number) =>
+            console.log(`Breadcrumb ${index} clicked`)
+          }
         />
       </View>
 
@@ -101,9 +105,11 @@ export default function SignInScreen() {
 
         <Text style={styles.divider}>Sign In with</Text>
         <View style={styles.socialButtons}>
-          <Pressable style={styles.googleButton} onPress={() => promptAsync()}>
-            <Text style={styles.buttonText}>Google</Text>
-          </Pressable>
+          <Button
+            label="Sign in with Google"
+            theme="google"
+            onPress={() => promptAsync()}
+          />
         </View>
       </View>
     </View>
@@ -126,14 +132,6 @@ const styles = StyleSheet.create({
   link: { color: "#F38B3C", alignSelf: "flex-end", marginBottom: 20 },
   button: {
     backgroundColor: "#F38B3C",
-    width: "100%",
-    padding: 12,
-    borderRadius: 15,
-    alignItems: "center",
-  },
-
-  googleButton: {
-    backgroundColor: "#000000",
     width: "100%",
     padding: 12,
     borderRadius: 15,
