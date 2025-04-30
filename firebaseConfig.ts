@@ -1,7 +1,8 @@
 // firebaseConfig.ts
 import { initializeApp } from "firebase/app";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import { getStorage, ref } from "firebase/storage";
 const firebaseConfig = {
   apiKey: "AIzaSyB9NKFyJfMnI7m5yZuTaEJVwgFp6O8knqY",
   authDomain: "foodash-mobile.firebaseapp.com",
@@ -15,5 +16,11 @@ const app = initializeApp(firebaseConfig);
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
+
+const storage = getStorage();
+const storageRef = ref(storage);
+
+const imagesRef = ref(storageRef, "images/");
+const videosRef = ref(storageRef, "videos/");
 
 export { auth };
