@@ -11,15 +11,15 @@ import {
 import Breadcrumb from "@/components/Breadcrumb";
 import SearchComponent from "@/components/Search";
 import { useRouter } from "expo-router";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, FieldErrors } from "react-hook-form";
 import { registerUser } from "@/authService";
 
-type SignUpFormData = {
+interface SignUpFormData {
   fullName: string;
   email: string;
   password: string;
   confirmPassword: string;
-};
+}
 
 export default function SignUpScreen() {
   const router = useRouter();
@@ -31,9 +31,6 @@ export default function SignUpScreen() {
     reset,
     formState: { errors },
   } = useForm<SignUpFormData>();
-
-  const handleBreadcrumbPress = (index: number) =>
-    console.log(`Breadcrumb ${index} clicked`);
 
   const onSubmit = async (data: SignUpFormData) => {
     if (data.password !== data.confirmPassword) {
@@ -49,17 +46,14 @@ export default function SignUpScreen() {
       ]);
       reset();
     } catch (error: any) {
-      // Firebase error messages can be technical, let's make them more user-friendly
       let errorMessage = error.message;
 
       if (errorMessage.includes("email-already-in-use")) {
-        errorMessage =
-          "This email is already registered. Please use a different email or try logging in.";
+        errorMessage = "This email is already registered.";
       } else if (errorMessage.includes("weak-password")) {
-        errorMessage =
-          "Please use a stronger password (at least 6 characters).";
+        errorMessage = "Password must be at least 6 characters.";
       } else if (errorMessage.includes("invalid-email")) {
-        errorMessage = "Please enter a valid email address.";
+        errorMessage = "Invalid email address.";
       }
 
       Alert.alert("Error", errorMessage);
@@ -68,16 +62,18 @@ export default function SignUpScreen() {
     }
   };
 
+  const renderFieldError = (field: keyof SignUpFormData) => {
+    const error = errors[field];
+    return error ? <Text style={styles.errorText}>{error.message}</Text> : null;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <SearchComponent />
       </View>
       <View style={styles.breadcrumbContainer}>
-        <Breadcrumb
-          breadcrumbs={["Auth", "Sign Up"]}
-          onPress={handleBreadcrumbPress}
-        />
+        <Breadcrumb breadcrumbs={["Auth", "Sign Up"]} onPress={() => {}} />
       </View>
 
       <View style={styles.formContainer}>
@@ -93,9 +89,7 @@ export default function SignUpScreen() {
                 onChangeText={onChange}
                 value={value}
               />
-              {errors.fullName && (
-                <Text style={styles.errorText}>{errors.fullName.message}</Text>
-              )}
+              {renderFieldError("fullName")}
             </View>
           )}
         />
@@ -120,9 +114,7 @@ export default function SignUpScreen() {
                 autoCapitalize="none"
                 keyboardType="email-address"
               />
-              {errors.email && (
-                <Text style={styles.errorText}>{errors.email.message}</Text>
-              )}
+              {renderFieldError("email")}
             </View>
           )}
         />
@@ -146,9 +138,7 @@ export default function SignUpScreen() {
                 onChangeText={onChange}
                 value={value}
               />
-              {errors.password && (
-                <Text style={styles.errorText}>{errors.password.message}</Text>
-              )}
+              {renderFieldError("password")}
             </View>
           )}
         />
@@ -170,11 +160,7 @@ export default function SignUpScreen() {
                 onChangeText={onChange}
                 value={value}
               />
-              {errors.confirmPassword && (
-                <Text style={styles.errorText}>
-                  {errors.confirmPassword.message}
-                </Text>
-              )}
+              {renderFieldError("confirmPassword")}
             </View>
           )}
         />
@@ -200,13 +186,6 @@ export default function SignUpScreen() {
             Sign in
           </Text>
         </Text>
-
-        <Text style={styles.divider}>Sign In with</Text>
-        <View style={styles.socialButtons}>
-          <Pressable style={styles.socialButton}>
-            <Text style={styles.buttonText}>Google</Text>
-          </Pressable>
-        </View>
       </View>
     </View>
   );
@@ -217,10 +196,7 @@ const styles = StyleSheet.create({
   headerContainer: { flex: 1 / 6, width: "100%" },
   breadcrumbContainer: { flex: 1 / 8, width: "100%", paddingHorizontal: 20 },
   formContainer: { flex: 1, alignItems: "center", paddingHorizontal: 20 },
-  inputContainer: {
-    width: "100%",
-    marginBottom: 15,
-  },
+  inputContainer: { width: "100%", marginBottom: 15 },
   input: {
     width: "100%",
     borderWidth: 1,
@@ -228,11 +204,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
-  errorText: {
-    color: "red",
-    fontSize: 12,
-    marginTop: 5,
-  },
+  errorText: { color: "red", fontSize: 12, marginTop: 5 },
   button: {
     backgroundColor: "#F38B3C",
     width: "100%",
@@ -242,21 +214,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     minHeight: 48,
   },
-  buttonDisabled: {
-    backgroundColor: "#F38B3C80", // 50% opacity
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "500",
-  },
+  buttonDisabled: { backgroundColor: "#F38B3C80" },
+  buttonText: { color: "#fff", fontWeight: "500" },
   linkText: { marginTop: 20 },
   linkOrange: { color: "#F38B3C" },
-  divider: { marginVertical: 20 },
-  socialButtons: { flexDirection: "row", gap: 20 },
-  socialButton: {
-    backgroundColor: "#F38B3C",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
 });

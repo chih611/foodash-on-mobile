@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -6,33 +6,40 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
 import Button from "@/components/Button";
-export default function ProfileScreen() {
-  const { control, handleSubmit } = useForm();
+import {
+  getUserProfile,
+  updateUserProfile,
+  ProfileData,
+} from "@/profileService";
 
-  const onSubmit = (data: any) => {
-    alert("Profile data submitted!" + JSON.stringify(data));
-    console.log("Submitted profile data:", data);
+export default function ProfileScreen() {
+  const { control, handleSubmit, reset } = useForm<ProfileData>();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const profile = await getUserProfile();
+      if (profile) reset(profile);
+    };
+    fetchProfile();
+  }, []);
+
+  const onSubmit = async (data: ProfileData) => {
+    try {
+      await updateUserProfile(data);
+      Alert.alert("Success", "Profile updated successfully");
+    } catch (err: any) {
+      Alert.alert("Error", err.message || "Failed to update profile");
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      {/* <View style={styles.header}>
-        <TouchableOpacity>
-          <Ionicons name="menu" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>StoreName</Text>
-        <TouchableOpacity>
-          <Ionicons name="person-circle-outline" size={28} color="#fff" />
-        </TouchableOpacity>
-      </View> */}
-
       <ScrollView contentContainerStyle={styles.content}>
-        {/* Avatar */}
         <View style={styles.avatarContainer}>
           <View style={styles.avatarCircle}>
             <Ionicons name="person-outline" size={64} color="#f38b3c" />
@@ -42,99 +49,36 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Input Fields */}
-        <View style={styles.row}>
+        {[
+          ["firstName", "First name"],
+          ["lastName", "Last name"],
+          ["dob", "dd/mm/yyyy"],
+          ["gender", "Gender"],
+          ["contacts", "Contacts"],
+          ["address1", "Address line 1"],
+          ["address2", "Address line 2"],
+        ].map(([name, placeholder]) => (
           <Controller
+            key={name}
             control={control}
-            name="firstName"
+            name={name as keyof ProfileData}
             render={({ field: { onChange, value } }) => (
               <TextInput
-                style={styles.input}
-                placeholder="First name"
+                style={
+                  name === "firstName" ||
+                  name === "lastName" ||
+                  name === "dob" ||
+                  name === "gender"
+                    ? styles.input
+                    : styles.inputFull
+                }
+                placeholder={placeholder}
                 onChangeText={onChange}
                 value={value}
               />
             )}
           />
-          <Controller
-            control={control}
-            name="lastName"
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Last name"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-        </View>
-
-        <View style={styles.row}>
-          <Controller
-            control={control}
-            name="dob"
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="dd/mm/yyyy"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="gender"
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Gender"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-        </View>
-
-        <Controller
-          control={control}
-          name="contacts"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.inputFull}
-              placeholder="Contacts"
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="address1"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.inputFull}
-              placeholder="Address line 1"
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="address2"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.inputFull}
-              placeholder="Address line 2"
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-        />
+        ))}
 
         <TouchableOpacity
           style={styles.saveButton}
@@ -145,7 +89,7 @@ export default function ProfileScreen() {
 
         <Button
           theme="red"
-          label="Sign out "
+          label="Sign out"
           onPress={() => alert("Signed out")}
         />
       </ScrollView>
@@ -155,21 +99,7 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
-  header: {
-    flexDirection: "row",
-    backgroundColor: "#f38b3c",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
-
-  content: {
-    padding: 20,
-    paddingBottom: 100,
-    alignItems: "center",
-  },
+  content: { padding: 20, paddingBottom: 100, alignItems: "center" },
   avatarContainer: {
     alignItems: "center",
     marginVertical: 20,
@@ -194,13 +124,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#f38b3c",
   },
-  row: {
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
-    gap: 10,
-    marginBottom: 10,
-  },
   input: {
     flex: 1,
     borderWidth: 1,
@@ -208,6 +131,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingHorizontal: 12,
     paddingVertical: 10,
+    marginBottom: 10,
+    width: "48%",
   },
   inputFull: {
     width: "100%",
@@ -227,31 +152,5 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  saveText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-
-  tabBar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 12,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
-  },
-  tabItem: {
-    alignItems: "center",
-    padding: 4,
-  },
-  tabLabel: {
-    fontSize: 12,
-    color: "#f38b3c",
-  },
-  activeTab: {
-    backgroundColor: "#f38b3c",
-    borderRadius: 12,
-    paddingHorizontal: 12,
-  },
+  saveText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
 });

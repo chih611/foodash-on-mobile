@@ -6,19 +6,15 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
-import { doc, setDoc, getFirestore } from "firebase/firestore";
-import { auth } from "./firebaseConfig";
-import { ProfileData } from "./profileService";
-const db = getFirestore();
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "./firebaseConfig";
 
-// User registration with profile creation
 export const registerUser = async (
   email: string,
   password: string,
   fullName: string
 ): Promise<User> => {
   try {
-    // Create the user account
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -26,16 +22,18 @@ export const registerUser = async (
     );
     const user = userCredential.user;
 
-    // Update the user's display name
-    await updateProfile(user, {
-      displayName: fullName,
-    });
+    await updateProfile(user, { displayName: fullName });
 
-    // Create initial profile document in Firestore
     const userDocRef = doc(db, "users", user.uid);
     await setDoc(userDocRef, {
       fullName,
       email,
+      dob: null,
+      gender: null,
+      contacts: null,
+      address1: null,
+      address2: null,
+      photoURL: null,
       createdAt: new Date().toISOString(),
     });
 
@@ -46,7 +44,6 @@ export const registerUser = async (
   }
 };
 
-// User sign-in
 export const signInUser = async (
   email: string,
   password: string
@@ -64,7 +61,6 @@ export const signInUser = async (
   }
 };
 
-// User sign-out
 export const signOutUser = async (): Promise<void> => {
   try {
     await signOut(auth);
@@ -74,7 +70,6 @@ export const signOutUser = async (): Promise<void> => {
   }
 };
 
-// Password reset
 export const resetPassword = async (email: string): Promise<void> => {
   try {
     await sendPasswordResetEmail(auth, email);
@@ -84,7 +79,6 @@ export const resetPassword = async (email: string): Promise<void> => {
   }
 };
 
-// Get current user
 export const getCurrentUser = (): User | null => {
   return auth.currentUser;
 };
