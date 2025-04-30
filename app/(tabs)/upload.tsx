@@ -1,9 +1,9 @@
 import { Text, View, StyleSheet } from 'react-native';
 
-export default function MapScreen() {
+export default function UploadScreen() {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Map screen</Text>
+            <Text style={styles.text}>Upload screen</Text>
         </View>
     );
 }

@@ -1,8 +1,10 @@
 import GoogleMap from "@/components/GoogleMap";
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 export default function MapScreen() {
-  return <View style={styles.container}>{/* <GoogleMap /> */}</View>;
+  return <View style={styles.container}>
+    <GoogleMap />
+  </View>;
 }
 
 const styles = StyleSheet.create({

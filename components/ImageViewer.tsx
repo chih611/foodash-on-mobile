@@ -31,9 +31,8 @@ export default function ImageViewer({ imgSource, link, name }: Props) {
 
 const styles = StyleSheet.create({
     image: {
-        width: 160,
-        height: 160,
-        marginHorizontal: 10,
+        width: 170,
+        minHeight: 160,
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
