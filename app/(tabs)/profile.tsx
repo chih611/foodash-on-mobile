@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Image,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
@@ -14,11 +15,12 @@ import Button from "@/components/Button";
 import {
   getUserProfile,
   updateUserProfile,
+  pickAndUploadProfileImage,
   ProfileData,
 } from "@/profileService";
 
 export default function ProfileScreen() {
-  const { control, handleSubmit, reset } = useForm<ProfileData>();
+  const { control, handleSubmit, reset, watch } = useForm<ProfileData>();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -37,14 +39,33 @@ export default function ProfileScreen() {
     }
   };
 
+  const handleAvatarUpload = async () => {
+    try {
+      const updatedProfile = await pickAndUploadProfileImage();
+      if (updatedProfile) reset(updatedProfile);
+      Alert.alert("Success", "Avatar updated!");
+    } catch (err: any) {
+      Alert.alert("Error", err.message || "Failed to upload avatar");
+    }
+  };
+
+  const photoURL = watch("photoURL");
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.avatarContainer}>
-          <View style={styles.avatarCircle}>
-            <Ionicons name="person-outline" size={64} color="#f38b3c" />
-          </View>
-          <TouchableOpacity style={styles.editIcon}>
+          {photoURL ? (
+            <Image source={{ uri: photoURL }} style={styles.avatarImage} />
+          ) : (
+            <View style={styles.avatarCircle}>
+              <Ionicons name="person-outline" size={64} color="#f38b3c" />
+            </View>
+          )}
+          <TouchableOpacity
+            style={styles.editIcon}
+            onPress={handleAvatarUpload}
+          >
             <MaterialIcons name="edit" size={20} color="#f38b3c" />
           </TouchableOpacity>
         </View>
@@ -113,6 +134,13 @@ const styles = StyleSheet.create({
     height: 120,
     justifyContent: "center",
     alignItems: "center",
+  },
+  avatarImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 75,
+    borderWidth: 2,
+    borderColor: "#f38b3c",
   },
   editIcon: {
     position: "absolute",

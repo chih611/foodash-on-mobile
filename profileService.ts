@@ -6,7 +6,9 @@ import {
   EmailAuthProvider,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import { auth, db } from "./firebaseConfig";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import * as ImagePicker from "expo-image-picker";
+import { auth, db, storage } from "./firebaseConfig";
 
 export interface ProfileData {
   fullName?: string;
@@ -20,6 +22,38 @@ export interface ProfileData {
   email?: string;
   photoURL?: string;
 }
+
+export const pickAndUploadProfileImage =
+  async (): Promise<ProfileData | null> => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5,
+      });
+
+      if (!result.canceled) {
+        const response = await fetch(result.assets[0].uri);
+        const blob = await response.blob();
+
+        const uid = auth.currentUser?.uid;
+        if (!uid) throw new Error("User not authenticated");
+
+        const imageRef = ref(storage, `avatars/${uid}.jpg`);
+        await uploadBytes(imageRef, blob);
+        const downloadURL = await getDownloadURL(imageRef);
+
+        await updateUserProfile({ photoURL: downloadURL });
+        return await getUserProfile();
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      return Promise.reject(error);
+    }
+  };
 
 export const updateUserProfile = async (
   profileData: ProfileData
@@ -49,16 +83,34 @@ export const updateUserProfile = async (
     }
 
     const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (userDoc.exists()) {
-      await setDoc(userDocRef, profileData, { merge: true });
-    } else {
-      await setDoc(userDocRef, profileData);
-    }
+    await setDoc(userDocRef, profileData, { merge: true });
   } catch (error) {
     console.error("Error updating profile:", error);
     return Promise.reject(error);
+  }
+};
+
+export const getUserProfile = async (): Promise<ProfileData | null> => {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("No authenticated user found");
+
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      return userDoc.data() as ProfileData;
+    } else {
+      return {
+        firstName: user.displayName?.split(" ")[0] || "",
+        lastName: user.displayName?.split(" ").slice(1).join(" ") || "",
+        email: user.email || "",
+        photoURL: user.photoURL || "",
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    return null;
   }
 };
 
@@ -96,29 +148,5 @@ export const updateUserPassword = async (
   } catch (error) {
     console.error("Error updating password:", error);
     return Promise.reject(error);
-  }
-};
-
-export const getUserProfile = async (): Promise<ProfileData | null> => {
-  try {
-    const user = auth.currentUser;
-    if (!user) throw new Error("No authenticated user found");
-
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (userDoc.exists()) {
-      return userDoc.data() as ProfileData;
-    } else {
-      return {
-        firstName: user.displayName?.split(" ")[0] || "",
-        lastName: user.displayName?.split(" ").slice(1).join(" ") || "",
-        email: user.email || "",
-        photoURL: user.photoURL || "",
-      };
-    }
-  } catch (error) {
-    console.error("Error fetching profile:", error);
-    return null;
   }
 };
