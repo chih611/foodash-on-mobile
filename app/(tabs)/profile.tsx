@@ -23,6 +23,7 @@ import {
 
 export default function ProfileScreen() {
   const { control, handleSubmit, reset, watch } = useForm<ProfileData>();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -31,8 +32,6 @@ export default function ProfileScreen() {
     };
     fetchProfile();
   }, []);
-
-  const router = useRouter();
 
   const onSubmit = async (data: ProfileData) => {
     try {
@@ -57,7 +56,7 @@ export default function ProfileScreen() {
     try {
       await signOutUser();
       await reset();
-      router.replace("/signIn"); // Redirect to sign-in page
+      router.replace("/signIn");
       Alert.alert("Success", "Signed out successfully");
     } catch (err: any) {
       Alert.alert("Error", err.message || "Failed to sign out");
@@ -85,9 +84,36 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* First Name and Last Name in same row */}
+        <View style={styles.row}>
+          <Controller
+            control={control}
+            name="firstName"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="First name"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="lastName"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Last name"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+        </View>
+
+        {/* Remaining fields in full width */}
         {[
-          ["firstName", "First name"],
-          ["lastName", "Last name"],
           ["dob", "dd/mm/yyyy"],
           ["gender", "Gender"],
           ["contacts", "Contacts"],
@@ -100,14 +126,7 @@ export default function ProfileScreen() {
             name={name as keyof ProfileData}
             render={({ field: { onChange, value } }) => (
               <TextInput
-                style={
-                  name === "firstName" ||
-                  name === "lastName" ||
-                  name === "dob" ||
-                  name === "gender"
-                    ? styles.input
-                    : styles.inputFull
-                }
+                style={styles.inputFull}
                 placeholder={placeholder}
                 onChangeText={onChange}
                 value={value}
@@ -123,7 +142,12 @@ export default function ProfileScreen() {
           <Text style={styles.saveText}>Save profile</Text>
         </TouchableOpacity>
 
-        <Button theme="red" label="Sign out" onPress={() => hanleSignOut()} />
+        <TouchableOpacity
+          style={[styles.saveButton, { backgroundColor: "#D9534F" }]}
+          onPress={hanleSignOut}
+        >
+          <Text style={styles.saveText}>Sign out</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -163,15 +187,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#f38b3c",
   },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
   input: {
-    flex: 1,
+    width: "48%",
     borderWidth: 1,
     borderColor: "#f38b3c",
     borderRadius: 6,
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginBottom: 10,
-    width: "48%",
   },
   inputFull: {
     width: "100%",
