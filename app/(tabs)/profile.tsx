@@ -9,6 +9,7 @@ import {
   Alert,
   Image,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
 import Button from "@/components/Button";
@@ -17,6 +18,7 @@ import {
   updateUserProfile,
   pickAndUploadProfileImage,
   ProfileData,
+  signOutUser,
 } from "@/profileService";
 
 export default function ProfileScreen() {
@@ -29,6 +31,8 @@ export default function ProfileScreen() {
     };
     fetchProfile();
   }, []);
+
+  const router = useRouter();
 
   const onSubmit = async (data: ProfileData) => {
     try {
@@ -46,6 +50,17 @@ export default function ProfileScreen() {
       Alert.alert("Success", "Avatar updated!");
     } catch (err: any) {
       Alert.alert("Error", err.message || "Failed to upload avatar");
+    }
+  };
+
+  const hanleSignOut = async () => {
+    try {
+      await signOutUser();
+      await reset();
+      router.replace("/signIn"); // Redirect to sign-in page
+      Alert.alert("Success", "Signed out successfully");
+    } catch (err: any) {
+      Alert.alert("Error", err.message || "Failed to sign out");
     }
   };
 
@@ -108,11 +123,7 @@ export default function ProfileScreen() {
           <Text style={styles.saveText}>Save profile</Text>
         </TouchableOpacity>
 
-        <Button
-          theme="red"
-          label="Sign out"
-          onPress={() => alert("Signed out")}
-        />
+        <Button theme="red" label="Sign out" onPress={() => hanleSignOut()} />
       </ScrollView>
     </View>
   );

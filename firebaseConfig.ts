@@ -8,7 +8,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyB9NKFyJfMnI7m5yZuTaEJVwgFp6O8knqY",
   authDomain: "foodash-mobile.firebaseapp.com",
   projectId: "foodash-mobile",
-  storageBucket: "foodash-mobile.appspot.com",
+  storageBucket: "foodash-mobile.firebasestorage.app",
   messagingSenderId: "341923236114",
   appId: "1:341923236114:android:2340983b1122dd82468bcb",
 };

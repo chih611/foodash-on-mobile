@@ -69,9 +69,6 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <SearchComponent />
-      </View>
       <View style={styles.breadcrumbContainer}>
         <Breadcrumb
           breadcrumbs={["Auth", "Sign In"]}
