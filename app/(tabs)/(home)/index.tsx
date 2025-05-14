@@ -6,10 +6,6 @@ import SearchComponent from '@/components/Search';
 import Breadcrumb from '@/components/Breadcrumb';
 import RestaurantCard from './restaurantCard';
 
-
-
-
-
 const PlaceholderImage = require('@/assets/images/birthday_cake.jpg');
 
 export default function Index() {

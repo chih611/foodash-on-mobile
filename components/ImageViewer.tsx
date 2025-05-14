@@ -1,6 +1,6 @@
 import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Image, ImageBackground, type ImageSource } from 'expo-image';
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 
 type Props = {
     imgSource: ImageSource;
@@ -10,7 +10,7 @@ type Props = {
 
 export default function ImageViewer({ imgSource, link, name }: Props) {
     const navigation = useNavigation();
-
+    const router = useRouter();
     const handlePress = () => {
         navigation.navigate(link); // Replace with your desired link
     };

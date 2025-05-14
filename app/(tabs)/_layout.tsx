@@ -2,7 +2,6 @@ import { Tabs } from "expo-router";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function TabLayout() {
@@ -30,15 +29,6 @@ export default function TabLayout() {
               color={color}
               size={24}
             />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="upload"
-        options={{
-          title: "Upload",
-          tabBarIcon: ({ color, focused }) => (
-            <AntDesign name="plussquareo" size={24} color={color} />
           ),
         }}
       />
