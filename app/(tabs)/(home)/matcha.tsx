@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Platform, ActivityIndicator, FlatList, Image, TouchableOpacity } from 'react-native';
 import * as Location from 'expo-location';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ImageBackground } from 'expo-image';
 import StarRating from '@/components/Rating';
 
 export default function MatchaScreen() {
@@ -123,24 +122,6 @@ export default function MatchaScreen() {
             setLoading(false);
         }
     };
-    // const getPlacePhotoUrl = async (photoReference: string): Promise<string> => {
-    //     try {
-    //         const url = `https://maps.googleapis.com/maps/api/place/photo`;
-    //         const params = {
-    //             maxwidth: 400,
-    //             photoreference: photoReference,
-    //             key: "AIzaSyBF5NvI9qkvQhE69wNxCwzovOr2ja5Cgtg",
-    //         };
-
-    //         const response = await axios.get(url, { params, responseType: 'text' });
-    //         // The response will redirect to the image URL
-    //         return response.request.responseURL || ''; // Use the redirected URL
-    //     } catch (error) {
-    //         console.error('Error fetching photo:', error);
-    //         return '';
-    //     }
-    // };
-
 
     if (loading && !region) {
         return (
