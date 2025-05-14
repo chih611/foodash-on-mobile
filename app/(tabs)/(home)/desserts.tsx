@@ -1,9 +1,9 @@
 import Breadcrumb from '@/components/Breadcrumb';
 import SearchComponent from '@/components/Search';
 import { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Platform, ActivityIndicator, FlatList, Image } from 'react-native';
+import { Text, View, StyleSheet, Platform, ActivityIndicator, FlatList, Image, TouchableOpacity } from 'react-native';
 import * as Location from 'expo-location';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { ImageBackground } from 'expo-image';
 import StarRating from '@/components/Rating';
 
@@ -158,6 +158,13 @@ export default function DessertsScreen() {
             </View>
         );
     }
+    const handleShopPress = (shop: Shop) => {
+        // console.log('Shop pressed:', shop);
+        router.push({
+            pathname: '/(tabs)/(map)/direction',
+            params: { shop: JSON.stringify(shop) },
+        });
+    };
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -177,16 +184,18 @@ export default function DessertsScreen() {
                             data={shops}
                             keyExtractor={(item) => item.place_id}
                             renderItem={({ item }) => (
-                                <View style={styles.item}>
-                                    <Image
-                                        source={{ uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photos ? item.photos[0].photo_reference : ''}&key=AIzaSyBF5NvI9qkvQhE69wNxCwzovOr2ja5Cgtg` }}
-                                        onError={(e) => console.log('Image load error:', e.nativeEvent.error)}
-                                        style={{ width: '100%', height: 200, borderRadius: 10 }}
-                                    />
-                                    <Text>{item.name}</Text>
-                                    <Text>{item.vicinity}</Text>
-                                    <StarRating rating={item.rating || 0} />
-                                </View>
+                                <TouchableOpacity onPress={() => handleShopPress(item)}>
+                                    <View style={styles.item}>
+                                        <Image
+                                            source={{ uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photos ? item.photos[0].photo_reference : ''}&key=AIzaSyBF5NvI9qkvQhE69wNxCwzovOr2ja5Cgtg` }}
+                                            onError={(e) => console.log('Image load error:', e.nativeEvent.error)}
+                                            style={{ width: '100%', height: 200, borderRadius: 10 }}
+                                        />
+                                        <Text>{item.name}</Text>
+                                        <Text>{item.vicinity}</Text>
+                                        <StarRating rating={item.rating || 0} />
+                                    </View>
+                                </TouchableOpacity>
                             )}
                         />
                     </View>
