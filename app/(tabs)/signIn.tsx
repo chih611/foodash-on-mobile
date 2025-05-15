@@ -12,6 +12,7 @@ import {
   signInWithCredential,
   GoogleAuthProvider,
 } from "firebase/auth";
+import { useForm, Controller } from "react-hook-form";
 import Button from "@/components/Button";
 import { auth } from "@/firebaseConfig";
 import * as Google from "expo-auth-session/providers/google";
@@ -22,11 +23,15 @@ import { useRouter } from "expo-router";
 
 WebBrowser.maybeCompleteAuthSession();
 
+type SignInFormData = {
+  email: string;
+  password: string;
+};
+
 export default function SignInScreen() {
   const router = useRouter();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { control, handleSubmit, reset } = useForm<SignInFormData>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
@@ -50,10 +55,12 @@ export default function SignInScreen() {
     }
   }, [response]);
 
-  const handleSignIn = async () => {
+  const onSubmit = async (data: SignInFormData) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      alert(`${data.email} ${data.password}`);
       Alert.alert("Success", "Signed in successfully!");
+      reset(); // optionally reset the form
       router.replace("/");
     } catch (err: any) {
       Alert.alert("Error", err.message);
@@ -62,9 +69,6 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <SearchComponent />
-      </View>
       <View style={styles.breadcrumbContainer}>
         <Breadcrumb
           breadcrumbs={["Auth", "Sign In"]}
@@ -75,21 +79,40 @@ export default function SignInScreen() {
       </View>
 
       <View style={styles.formContainer}>
-        <TextInput
-          placeholder="Account"
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
+        <Controller
+          control={control}
+          name="email"
+          rules={{ required: "Email is required" }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              placeholder="Account"
+              style={styles.input}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+          )}
         />
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
+
+        <Controller
+          control={control}
+          name="password"
+          rules={{ required: "Password is required" }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              placeholder="Password"
+              style={styles.input}
+              secureTextEntry
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
+
         <Text style={styles.link}>Forgot password?</Text>
-        <Pressable style={styles.button} onPress={handleSignIn}>
+
+        <Pressable style={styles.button} onPress={handleSubmit(onSubmit)}>
           <Text style={styles.buttonText}>Sign in</Text>
         </Pressable>
 
@@ -97,7 +120,7 @@ export default function SignInScreen() {
           Don’t have an account?{" "}
           <Text
             style={styles.linkOrange}
-            onPress={() => router.push("/signUp")}
+            onPress={() => router.push("/(tabs)/signUp")}
           >
             Sign up
           </Text>

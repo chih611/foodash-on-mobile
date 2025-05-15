@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, FlatList, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Button, FlatList, Image, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
+import StarRating from './Rating';
+import { router } from 'expo-router';
 
 
 const DessertShopsMap = () => {
@@ -122,7 +124,13 @@ const DessertShopsMap = () => {
             fetchNearbyShops(region.latitude, region.longitude, item);
         }
     };
-
+    const handleShopPress = (shop: Shop) => {
+        // console.log('Shop pressed:', shop);
+        router.push({
+            pathname: '/(tabs)/(map)/direction',
+            params: { shop: JSON.stringify(shop) },
+        });
+    };
     if (loading && !region) {
         return (
             <View style={styles.loadingContainer}>
@@ -225,11 +233,22 @@ const DessertShopsMap = () => {
                         data={shops}
                         keyExtractor={(item) => item.place_id}
                         renderItem={({ item }) => (
-                            <View style={styles.shopItem}>
-                                <Text style={styles.shopName}>{item.name}</Text>
-                                <Text style={styles.shopAddress}>{item.vicinity}</Text>
-                                <Text style={styles.shopRating}>Rating: {item.rating || 'N/A'}</Text>
-                            </View>
+                            <TouchableOpacity onPress={() => handleShopPress(item)}>
+                                <View style={styles.shopItem}>
+                                    <View>
+                                        <Image
+                                            source={{ uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photos ? item.photos[0].photo_reference : ''}&key=AIzaSyBF5NvI9qkvQhE69wNxCwzovOr2ja5Cgtg` }}
+                                            onError={(e) => console.log('Image load error:', e.nativeEvent.error)}
+                                            style={{ width: 60, height: 60, borderRadius: 15, marginRight: 10 }}
+                                        />
+                                    </View>
+                                    <View>
+                                        <Text style={styles.shopName}>{item.name}</Text>
+                                        <Text style={styles.shopAddress}>{item.vicinity}</Text>
+                                        <StarRating rating={item.rating || 0} />
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         )}
                     />
                 </View>
@@ -323,6 +342,8 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     shopItem: {
+        flex: 1,
+        flexDirection: 'row',
         width: 200,
         padding: 10,
         marginRight: 10,
