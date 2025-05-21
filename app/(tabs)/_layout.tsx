@@ -50,7 +50,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="signIn"
         options={{
           title: "Sign In",
@@ -67,7 +67,7 @@ export default function TabLayout() {
             <FontAwesome name="user-circle" size={24} color={color} />
           ),
         }}
-      />
+      /> */}
     </Tabs>
   );
 }

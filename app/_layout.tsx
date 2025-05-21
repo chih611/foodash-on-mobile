@@ -14,10 +14,10 @@ export default function RootLayout() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(" Authenticated:", user.email);
+        console.log("✅ Authenticated:", user.email);
         setIsUser(true);
       } else {
-        console.log(" Unauthenticated");
+        console.log("🚫 Unauthenticated");
         setIsUser(false);
       }
       setIsAuthChecked(true);
@@ -40,7 +40,7 @@ export default function RootLayout() {
     }
   }, [isAuthChecked, isUser, pathname]);
 
-  // Show loading spinner
+  // Show loading spinner while checking auth
   if (!isAuthChecked || isUser === null) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -51,7 +51,13 @@ export default function RootLayout() {
 
   return (
     <Stack>
+      {/* Always available routes */}
+      <Stack.Screen name="signIn" options={{ headerShown: false }} />
+      <Stack.Screen name="signUp" options={{ headerShown: false }} />
+
+      {/* Tabs and other protected routes */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(map)" options={{ headerShown: false }} />
     </Stack>
   );
 }
