@@ -50,24 +50,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="signIn"
-        options={{
-          title: "Sign In",
-          tabBarIcon: ({ color, focused }) => (
-            <FontAwesome name="user-circle" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="signUp"
-        options={{
-          title: "Sign Up",
-          tabBarIcon: ({ color, focused }) => (
-            <FontAwesome name="user-circle" size={24} color={color} />
-          ),
-        }}
-      />
+
     </Tabs>
   );
 }

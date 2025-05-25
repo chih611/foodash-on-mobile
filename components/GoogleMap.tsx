@@ -29,6 +29,9 @@ const DessertShopsMap = () => {
                 lng: number;
             };
         };
+        photos?: {
+            photo_reference: string;
+        }[];
     }
 
     const [shops, setShops] = useState<Shop[]>([]);
