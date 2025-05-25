@@ -120,7 +120,7 @@ export default function SignInScreen() {
           Don’t have an account?{" "}
           <Text
             style={styles.linkOrange}
-            onPress={() => router.push("/(tabs)/signUp")}
+            onPress={() => router.push("/signUp")}
           >
             Sign up
           </Text>
