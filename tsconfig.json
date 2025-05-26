@@ -19,3 +19,21 @@
     "expo-env.d.ts"
   ]
 }
+// {
+//   "extends": "expo/tsconfig.base",
+//   "compilerOptions": {
+//     "strict": true,
+//     "moduleResolution": "node",
+//     "baseUrl": ".",
+//     "types": [
+//       "jest",
+//       "@testing-library/jest-native"
+//     ],
+//     "module": "esnext",
+//     "jsx": "react-native"
+//   },
+//   "include": [
+//     "app/**/*",
+//     "__tests__/**/*"
+//   ]
+// }
