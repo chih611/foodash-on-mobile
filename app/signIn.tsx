@@ -140,7 +140,12 @@ export default function SignInScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    marginTop: 30,
+    backgroundColor: "#fff",
+  },
   headerContainer: { flex: 1 / 6, width: "100%" },
   breadcrumbContainer: { flex: 1 / 8, width: "100%", paddingHorizontal: 20 },
   formContainer: { flex: 1, alignItems: "center", paddingHorizontal: 20 },

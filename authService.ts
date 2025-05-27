@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "./firebaseConfig";
+import analytics from "@react-native-firebase/analytics";
 
 export const registerUser = async (
   email: string,
@@ -54,6 +55,10 @@ export const signInUser = async (
       email,
       password
     );
+    await analytics().logEvent("sign_in", {
+      method: "email",
+      user_id: userCredential.user.uid,
+    });
     return userCredential.user;
   } catch (error) {
     console.error("Error signing in:", error);
