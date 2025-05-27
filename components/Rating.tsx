@@ -23,27 +23,36 @@ export default function StarRating({
             {Array(filledStars)
                 .fill(0)
                 .map((_, index) => (
-                    <Icon
-                        key={`filled-${index}`}
-                        name="star"
-                        size={starSize}
-                        color="#FFD700"
-                    />
+                    <View testID="star-filled" key={`filled-${index}`}>
+                        <Icon
+                            key={`filled-${index}`}
+                            name="star"
+                            size={starSize}
+                            color="#FFD700"
+                        />
+                    </View>
+
                 ))}
             {/* Half star */}
             {hasHalfStar && (
-                <Icon key="half" name="star-half" size={starSize} color="#FFD700" />
+                <View testID="star-half" key="half">
+                    <Icon key="half" name="star-half" size={starSize} color="#FFD700" />
+                </View>
+
             )}
             {/* Empty stars */}
             {Array(emptyStars)
                 .fill(0)
                 .map((_, index) => (
-                    <Icon
-                        key={`empty-${index}`}
-                        name="star-outline"
-                        size={starSize}
-                        color="#FFD700"
-                    />
+                    <View testID="star-empty" key={`empty-${index}`}>
+                        <Icon
+                            key={`empty-${index}`}
+                            name="star-outline"
+                            size={starSize}
+                            color="#FFD700"
+                        />
+                    </View>
+
                 ))}
         </View>
     );

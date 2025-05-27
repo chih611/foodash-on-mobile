@@ -28,7 +28,7 @@ const SearchComponent = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View>
             {/* Search Input */}
             <View style={styles.searchContainer}>
                 <TextInput

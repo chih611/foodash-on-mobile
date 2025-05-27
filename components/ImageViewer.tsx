@@ -15,7 +15,7 @@ export default function ImageViewer({ imgSource, link, name }: Props) {
         navigation.navigate(link); // Replace with your desired link
     };
     return (
-        <TouchableOpacity onPress={handlePress}>
+        <TouchableOpacity onPress={handlePress} accessibilityRole="button">
             {/* <Image source={imgSource} style={styles.image} placeholder='Desserts' /> */}
             <ImageBackground
                 source={imgSource} // Replace with your image URL
